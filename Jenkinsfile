@@ -19,6 +19,20 @@ pipeline {
                 // Run the maven build
                 sh 'mvn -Dmaven.test.failure.ignore clean package'
             }
+            post{
+                always {
+                    junit stdioRetention: '', testResults: '**/target/surefire-reports/*.xml'
+                }
+                success {
+                    // archive jar
+                    archiveArtifacts artifacts: '**/target/*.jar', followSymlinks: false
+                    stash includes: '**/target/*.jar', name: 'DEPLOY_JAR'
+                }
+                unstable {
+                    // send mail
+                    mail bcc: '', body: 'your build has failed', cc: '', from: '', replyTo: '', subject: 'Build failed', to: 'olivier.vercaemer@bnpparibas.com'
+                }
+            } 
         }
         stage('Analyse qualité et vulnérabilités') {
             parallel {
@@ -41,6 +55,7 @@ pipeline {
         }
             
         stage('Déploiement intégration') {
+            agent any
             input {
                 message 'Dans quel Data Center, voulez-vous déployer l’artefact ?'
                 ok 'Déployer'
@@ -51,24 +66,11 @@ pipeline {
 
             steps {
                 echo "Déploiement intégration"
-                
+                dir('deploy') {
+                    unstash 'DEPLOY_JAR'
+                }
             }
         }
-
-    }
-    post{
-        always {
-            junit stdioRetention: '', testResults: '**/target/surefire-reports/*.xml'
-        }
-        success {
-            // archive jar
-            archiveArtifacts artifacts: '**/target/*.jar', followSymlinks: false
-        }
-        unstable {
-            // send mail
-            mail bcc: '', body: 'your build has failed', cc: '', from: '', replyTo: '', subject: 'Build failed', to: 'olivier.vercaemer@bnpparibas.com'
-        }
-    } 
-    
+    }    
 }
 
