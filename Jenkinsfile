@@ -4,7 +4,10 @@ pipeline {
         maven 'MAVEN3'
         jdk 'JDK17'
     }
-
+    environment{
+        SONARQUBE_TOKEN = credentials('SONARQUBE_TOKEN')
+    } 
+    
     stages {
         stage('Compile et tests') {
             steps {
@@ -16,19 +19,6 @@ pipeline {
                 sh 'mvn -Dmaven.test.failure.ignore clean package'
             }
         }
-        post{
-            always {
-                junit stdioRetention: '', testResults: '**/target/surefire-reports/*.xml'
-            }
-            success {
-                // archive jar
-                archiveArtifacts artifacts: '**/target/*.jar', followSymlinks: false
-            }
-            unstable {
-                // send mail
-                mail bcc: '', body: 'your build has failed', cc: '', from: '', replyTo: '', subject: 'Build failed', to: 'olivier.vercaemer@bnpparibas.com'
-            }
-        } 
         stage('Analyse qualité et vulnérabilités') {
             parallel {
                 stage('Vulnérabilités') {
@@ -56,6 +46,19 @@ pipeline {
         }
 
      }
+    post{
+        always {
+            junit stdioRetention: '', testResults: '**/target/surefire-reports/*.xml'
+        }
+        success {
+            // archive jar
+            archiveArtifacts artifacts: '**/target/*.jar', followSymlinks: false
+        }
+        unstable {
+            // send mail
+            mail bcc: '', body: 'your build has failed', cc: '', from: '', replyTo: '', subject: 'Build failed', to: 'olivier.vercaemer@bnpparibas.com'
+        }
+    } 
     
 }
 
