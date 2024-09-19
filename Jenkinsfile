@@ -74,7 +74,7 @@ pipeline {
                     def deployementsTargets = readJSON file: 'deployments.json'
                     //assert deployementsTargets['dataCenters'].length() > 0
                     for( datacenter in deployementsTargets['dataCenters'] ) {
-                        sh 'cp *.jar /home/plb/mywork/Serveurs/$datacenter'
+                        sh "cp *.jar /home/plb/mywork/Serveurs/$datacenter"
                     }
                 } 
             }
