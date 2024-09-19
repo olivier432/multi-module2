@@ -59,18 +59,21 @@ pipeline {
             
         stage('Déploiement intégration') {
             agent any
-            input {
+            /*input {
                 message 'Dans quel Data Center, voulez-vous déployer l’artefact ?'
                 ok 'Déployer'
                 parameters {
                     choice choices: ['Paris','Lille','Lyon'], name: 'DATACENTER'
                 }
-            }
+            }*/
+            def deployementsTargets = readJSON file: 'dir/input.json'
+            //assert deployementsTargets['attr1'] == 'One'
 
             steps {
                 echo "Déploiement intégration"
-                dir('deploy') {
-                    unstash 'DEPLOY_JAR'
+                unstash 'DEPLOY_JAR'
+                for( datacenter in deployementsTargets['dataCenters'] ) {
+                    sh 'cp *.jar /home/plb/mywork/Serveurs/$datacenter'
                 }
             }
         }
