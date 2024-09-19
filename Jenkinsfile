@@ -66,13 +66,13 @@ pipeline {
                     choice choices: ['Paris','Lille','Lyon'], name: 'DATACENTER'
                 }
             }*/
-            //assert deployementsTargets['attr1'] == 'One'
 
             steps {
                 echo "Déploiement intégration"
                 unstash 'DEPLOY_JAR'
                 script {
-                    def deployementsTargets = readJSON file: 'dir/input.json'
+                    def deployementsTargets = readJSON file: 'deployements.json'
+                    assert deployementsTargets['dataCenters'].length() > 0
                     for( datacenter in deployementsTargets['dataCenters'] ) {
                         sh 'cp *.jar /home/plb/mywork/Serveurs/$datacenter'
                     }
