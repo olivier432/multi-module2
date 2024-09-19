@@ -5,7 +5,7 @@ pipeline {
         jdk 'JDK17'
     }
     environment{
-        SONARQUBE_TOKEN = credentials('SONARQUBE_TOKEN')
+        SONAR_TOKEN = credentials('SONARQUBE_TOKEN')
     } 
     
     stages {
@@ -24,14 +24,15 @@ pipeline {
                 stage('Vulnérabilités') {
                     steps {
                         echo 'Tests de Vulnérabilités OWASP'
+                        sh 'mvn -DskipTests verify'
                     }
                     
                 }
-                 stage('Analyse Sonar') {
-                     steps {
+                stage('Analyse Sonar') {
+                    steps {
                         echo 'Analyse sonar'
-                     }
-                    
+                        sh 'mvn -Dsonar.login=${SONAR_TOKEN} clean integration-test sonar:sonar'
+                    }
                 }
             }
             
