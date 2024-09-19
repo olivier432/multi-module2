@@ -21,7 +21,6 @@ pipeline {
             }
         }
         stage('Analyse qualité et vulnérabilités') {
-            agent any
             parallel {
                 /*stage('Vulnérabilités') {
                     steps {
@@ -31,6 +30,7 @@ pipeline {
                   
                 }*/
                 stage('Analyse Sonar') {
+                    agent any
                     steps {
                         echo 'Analyse sonar'
                         sh './mvnw -Dsonar.login=${SONAR_TOKEN} clean integration-test sonar:sonar'
