@@ -1,3 +1,4 @@
+def DATACENTER_LIST
 pipeline {
     agent none 
     tools {
@@ -7,7 +8,6 @@ pipeline {
     environment{
         SONAR_TOKEN = credentials('SONARQUBE_TOKEN')
     } 
-    def DATACENTER_LIST
 
     stages {
         stage('Compile et tests') {
