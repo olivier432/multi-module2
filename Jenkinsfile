@@ -24,14 +24,14 @@ pipeline {
                 stage('Vulnérabilités') {
                     steps {
                         echo 'Tests de Vulnérabilités OWASP'
-                        sh 'mvn -DskipTests verify'
+                        sh './mvnw -DskipTests verify'
                     }
                     
                 }
                 stage('Analyse Sonar') {
                     steps {
                         echo 'Analyse sonar'
-                        sh 'mvn -Dsonar.login=${SONAR_TOKEN} clean integration-test sonar:sonar'
+                        sh './mvnw -Dsonar.login=${SONAR_TOKEN} clean integration-test sonar:sonar'
                     }
                 }
             }
