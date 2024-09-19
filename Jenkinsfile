@@ -57,28 +57,35 @@ pipeline {
             }
             
         }
-            
+        stage('Déploiement sur les Datacenters ?') {
+            input {
+                message 'Dans quel Data Center, voulez-vous déployer l’artefact ?'
+                ok 'Déployer'
+            }
+            echo "Deploying..."
+        }
+           
         stage('Déploiement intégration') {
             agent any
-            input {
+            /*input {
                 message 'Dans quel Data Center, voulez-vous déployer l’artefact ?'
                 ok 'Déployer'
                 parameters {
                     choice choices: ['Paris','Lille','Lyon'], name: 'DATACENTER'
                 }
-            }
+            }*/
 
             steps {
                 echo "Déploiement intégration"
                 unstash 'DEPLOY_JAR'
-                sh "cp *.jar /home/plb/mywork/Serveurs/$DATACENTER"
-                /*script {
+                //sh "cp *.jar /home/plb/mywork/Serveurs/$DATACENTER"
+                script {
                     def deployementsTargets = readJSON file: 'deployments.json'
                     //assert deployementsTargets['dataCenters'].length() > 0
-                    for( datacenter in deployementsTargets['dataCenters'] ) {
+                    for( def datacenter in deployementsTargets['dataCenters'] ) {
                         sh "cp *.jar /home/plb/mywork/Serveurs/$datacenter"
                     }
-                } */
+                }
             }
         }
     }    
