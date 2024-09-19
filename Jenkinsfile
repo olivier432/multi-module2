@@ -25,8 +25,10 @@ pipeline {
                 }
                 success {
                     // archive jar
-                    archiveArtifacts artifacts: '**/target/*.jar', followSymlinks: false
-                    stash includes: '**/target/*.jar', name: 'DEPLOY_JAR'
+                    archiveArtifacts artifacts: 'application/target/*.jar', followSymlinks: false
+                    dir('application/target') { 
+                        stash includes: '*.jar', name: 'DEPLOY_JAR'
+                    }  
                 }
                 unstable {
                     // send mail
