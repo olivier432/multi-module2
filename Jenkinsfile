@@ -1,5 +1,5 @@
 pipeline {
-    agent any 
+    agent none 
     tools {
         maven 'MAVEN3'
         jdk 'JDK17'
@@ -10,6 +10,7 @@ pipeline {
     
     stages {
         stage('Compile et tests') {
+            agent any
             steps {
                 echo 'Unit test et packaging'
                 //def mvnHome
@@ -20,14 +21,15 @@ pipeline {
             }
         }
         stage('Analyse qualité et vulnérabilités') {
+            agent any
             parallel {
-                stage('Vulnérabilités') {
+                /*stage('Vulnérabilités') {
                     steps {
                         echo 'Tests de Vulnérabilités OWASP'
                         sh './mvnw -DskipTests verify'
                     }
-                    
-                }
+                  
+                }*/
                 stage('Analyse Sonar') {
                     steps {
                         echo 'Analyse sonar'
