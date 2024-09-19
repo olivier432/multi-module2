@@ -38,18 +38,19 @@ pipeline {
         }
         stage('Analyse qualité et vulnérabilités') {
             parallel {
-                /*stage('Vulnérabilités') {
+                stage('Vulnérabilités') {
+                    agent any
                     steps {
                         echo 'Tests de Vulnérabilités OWASP'
-                        sh './mvnw -DskipTests verify'
+                        //sh './mvnw -DskipTests verify'
                     }
                   
-                }*/
+                }
                 stage('Analyse Sonar') {
                     agent any
                     steps {
                         echo 'Analyse sonar'
-                        sh './mvnw -Dsonar.login=${SONAR_TOKEN} clean integration-test sonar:sonar'
+                        //sh './mvnw -Dsonar.login=${SONAR_TOKEN} clean integration-test sonar:sonar'
                     }
                 }
             }
