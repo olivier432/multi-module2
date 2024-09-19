@@ -7,7 +7,8 @@ pipeline {
     environment{
         SONAR_TOKEN = credentials('SONARQUBE_TOKEN')
     } 
-    
+    def DATACENTER_LIST
+
     stages {
         stage('Compile et tests') {
             agent any
@@ -59,24 +60,25 @@ pipeline {
             
         stage('Déploiement intégration') {
             agent any
-            /*input {
+            input {
                 message 'Dans quel Data Center, voulez-vous déployer l’artefact ?'
                 ok 'Déployer'
                 parameters {
                     choice choices: ['Paris','Lille','Lyon'], name: 'DATACENTER'
                 }
-            }*/
+            }
 
             steps {
                 echo "Déploiement intégration"
                 unstash 'DEPLOY_JAR'
-                script {
+                sh "cp *.jar /home/plb/mywork/Serveurs/$DATACENTER"
+                /*script {
                     def deployementsTargets = readJSON file: 'deployments.json'
                     //assert deployementsTargets['dataCenters'].length() > 0
                     for( datacenter in deployementsTargets['dataCenters'] ) {
                         sh "cp *.jar /home/plb/mywork/Serveurs/$datacenter"
                     }
-                } 
+                } */
             }
         }
     }    
