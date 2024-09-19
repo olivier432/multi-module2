@@ -13,7 +13,10 @@ pipeline {
 
                 //mvnHome = tool 'MAVEN3'
                 // Run the maven build
-                sh 'mvn -Dmaven.test.failure.ignore clean package'        
+                sh 'mvn -Dmaven.test.failure.ignore clean package'
+                always {
+                    junit stdioRetention: '', testResults: '**/target/surefire-reports/*.xml'
+                }
             }
              
         }
