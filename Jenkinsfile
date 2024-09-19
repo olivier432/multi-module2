@@ -58,11 +58,14 @@ pipeline {
             
         }
         stage('Déploiement sur les Datacenters ?') {
-            input {
-                message 'Dans quel Data Center, voulez-vous déployer l’artefact ?'
-                ok 'Déployer'
-            }
-            echo "Deploying..."
+            agent none
+            steps {
+                input {
+                    message 'Voulez-vous déployer l’artefact ?'
+                    ok 'Déployer'
+                }
+                echo "Deploying..."
+            } 
         }
            
         stage('Déploiement intégration') {
