@@ -45,7 +45,7 @@ pipeline {
                 message 'Dans quel Data Center, voulez-vous déployer l’artefact ?'
                 ok 'Déployer'
                 parameters {
-                    choice choices: ['Paris,Lille,Lyon'], name: 'DATACENTER'
+                    choice choices: ['Paris','Lille','Lyon'], name: 'DATACENTER'
                 }
             }
 
