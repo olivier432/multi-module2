@@ -71,7 +71,7 @@ pipeline {
                 echo "Déploiement intégration"
                 unstash 'DEPLOY_JAR'
                 script {
-                    def deployementsTargets = readJSON file: 'deployements.json'
+                    def deployementsTargets = readJSON file: 'deployments.json'
                     assert deployementsTargets['dataCenters'].length() > 0
                     for( datacenter in deployementsTargets['dataCenters'] ) {
                         sh 'cp *.jar /home/plb/mywork/Serveurs/$datacenter'
