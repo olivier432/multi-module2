@@ -46,7 +46,7 @@ pipeline {
             }
         }
 
-     }
+    }
     post{
         always {
             junit stdioRetention: '', testResults: '**/target/surefire-reports/*.xml'
