@@ -15,7 +15,10 @@ pipeline {
                 docker {
                     image 'maven'
                     args '-v $HOME/.m2:/root/.m2'
-                } 
+                }
+                steps {
+                    sh "unset JAVA_HOME && mvn clean install"
+                }
             } 
             steps {
                 echo 'Unit test et packaging'
