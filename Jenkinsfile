@@ -48,6 +48,22 @@ pipeline {
                     image 'grafana/grafana'
                 }
             }
+            steps {
+                echo "Run grafana"
+            }  
+        } 
+        stage('Push Docker Hub') {
+            agent any
+            steps {
+                echo "Push vers docker hub"
+                unstash 'DEPLOY_JAR'
+                script {
+                    def dockerImage = docker.build("overcaemer/multi-module", '.')
+                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_CRED') {
+                    dockerImage.push "${BRANCH_NAME}"
+                    }
+                }
+            } 
         } 
         stage('Analyse qualité et vulnérabilités') {
           parallel {
