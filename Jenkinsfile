@@ -11,19 +11,22 @@ pipeline {
  
     stages {
         stage('Compile et tests') {
-            agent { 
-                docker {
-                    image 'maven'
-                    args '-v $HOME/.m2:/root/.m2'
+            agent {
+                kubernetes {
+                    inheritFrom 'jdk17-agent'
                 }
-            } 
+            }
             steps {
-                echo 'Unit test et packaging'
-                //def mvnHome
+                container(name: 'openjdk-17') {
+                    sh 'javac -version'
+                
+                    echo 'Unit test et packaging'
+                    //def mvnHome
 
-                //mvnHome = tool 'MAVEN3'
-                // Run the maven build
-                sh 'mvn -Dmaven.test.failure.ignore clean package'
+                    //mvnHome = tool 'MAVEN3'
+                    // Run the maven build
+                    sh 'mvn -Dmaven.test.failure.ignore clean package'
+                } 
             }
             post{
                 always {
