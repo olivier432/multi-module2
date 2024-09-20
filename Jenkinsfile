@@ -16,9 +16,6 @@ pipeline {
                     image 'maven'
                     args '-v $HOME/.m2:/root/.m2'
                 }
-                steps {
-                    sh "unset JAVA_HOME && mvn clean install"
-                }
             } 
             steps {
                 echo 'Unit test et packaging'
@@ -26,7 +23,7 @@ pipeline {
 
                 //mvnHome = tool 'MAVEN3'
                 // Run the maven build
-                sh 'mvn -Dmaven.test.failure.ignore clean package'
+                sh 'unset JAVA_HOME && mvn -Dmaven.test.failure.ignore clean package'
             }
             post{
                 always {
