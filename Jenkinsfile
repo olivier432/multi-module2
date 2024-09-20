@@ -59,7 +59,7 @@ pipeline {
                 unstash 'DEPLOY_JAR'
                 script {
                     def dockerImage = docker.build("overcaemer/multi-module", '.')
-                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_CRED') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_TOKEN') {
                     dockerImage.push "${BRANCH_NAME}"
                     }
                 }
