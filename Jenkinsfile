@@ -1,14 +1,14 @@
 def DATACENTER_LIST
 pipeline {
     agent none 
-    tools {
-        maven 'MAVEN3'
-        jdk 'JDK17'
-    }
     environment{
         SONAR_TOKEN = credentials('SONARQUBE_TOKEN')
     } 
-
+    /*tools {
+        maven 'MAVEN3'
+        jdk 'JDK17'
+    }*/
+ 
     stages {
         stage('Compile et tests') {
             agent { 
@@ -23,7 +23,7 @@ pipeline {
 
                 //mvnHome = tool 'MAVEN3'
                 // Run the maven build
-                sh 'unset JAVA_HOME && mvn -Dmaven.test.failure.ignore clean package'
+                sh 'mvn -Dmaven.test.failure.ignore clean package'
             }
             post{
                 always {
@@ -43,7 +43,7 @@ pipeline {
             } 
         }
         stage('Analyse qualité et vulnérabilités') {
-            parallel {
+          parallel {
                 stage('Vulnérabilités') {
                     agent any
                     steps {
