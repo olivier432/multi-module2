@@ -45,16 +45,7 @@ pipeline {
                 }
             } 
         }
-        stage('Grafana') {
-            agent { 
-                docker {
-                    image 'grafana/grafana'
-                }
-            }
-            steps {
-                echo "Run grafana"
-            }  
-        } 
+
         stage('Push Docker Hub') {
             agent any
             steps {
