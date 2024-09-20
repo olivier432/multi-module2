@@ -42,6 +42,13 @@ pipeline {
                 }
             } 
         }
+        stage('Grafana') {
+            agent { 
+                docker {
+                    image 'grafana/grafana'
+                }
+            }
+        } 
         stage('Analyse qualité et vulnérabilités') {
           parallel {
                 stage('Vulnérabilités') {
