@@ -25,7 +25,7 @@ pipeline {
 
                     //mvnHome = tool 'MAVEN3'
                     // Run the maven build
-                    sh 'mvn -Dmaven.test.failure.ignore clean package'
+                    sh './mvnw -Dmaven.test.failure.ignore clean package'
                 } 
             }
             post{
@@ -65,7 +65,7 @@ pipeline {
                     agent any
                     steps {
                         echo 'Tests de Vulnérabilités OWASP'
-                        //sh './mvnw -DskipTests verify'
+                        sh './mvnw -DskipTests verify'
                     }
                   
                 }
